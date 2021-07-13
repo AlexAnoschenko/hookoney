@@ -8,6 +8,8 @@ import firebase from "firebase";
 const firebaseConfig = {
   apiKey: "AIzaSyCuerGBewQkdfa3k_3uLI3ope4RaT_sizI",
   authDomain: "hookoney-c50a4.firebaseapp.com",
+  databaseURL:
+    "https://hookoney-c50a4-default-rtdb.europe-west1.firebasedatabase.app",
   projectId: "hookoney-c50a4",
   storageBucket: "hookoney-c50a4.appspot.com",
   messagingSenderId: "142885839129",
@@ -16,6 +18,7 @@ const firebaseConfig = {
 };
 
 firebase.initializeApp(firebaseConfig);
+firebase.analytics();
 
 ReactDOM.render(
   <React.StrictMode>

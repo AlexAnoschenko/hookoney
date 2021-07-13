@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 import firebase from "firebase";
 import "./App.css";
 
@@ -6,8 +6,9 @@ function App() {
   const [state, setState] = useState({
     email: "",
     password: "",
-    hasAccount: false,
+    // hasAccount: false,
     name: "",
+    currentUser: null,
   });
 
   const handleChange = ({ target: { value, id } }) => {
@@ -18,39 +19,33 @@ function App() {
     const { email, password } = state;
     // firebase.auth().createUserWithEmailAndPassword(email, password);
 
-    firebase
-      .auth()
-      .signInWithEmailAndPassword(email, password)
-      .then((response) => {
-        setState({ ...state, hasAccount: true });
-      });
+    firebase.auth().signInWithEmailAndPassword(email, password);
+    // .then((response) => {
+    //   setState({ ...state, hasAccount: true });
+    //   console.log(response);
+    // });
   };
 
-  useEffect(() => {
-    // const db = firebase.database();
+  const db = firebase.database();
 
-    var starCountRef = firebase.database().ref("name");
-
-    console.log(starCountRef);
-
-    starCountRef.on("value", (snapshot) => {
-      const data = snapshot.val();
-      console.log(data);
-    });
-
-    // const name = db.ref("name");
-    // name.on("value", (elem) => {
-    //   setState({ ...state, name: elem.val() });
-    // });
-
-    // console.log(state);
+  db.ref("name").on("value", (snapshot) => {
+    snapshot.val();
   });
+
+  useEffect(() => {
+    firebase
+      .auth()
+      .onAuthStateChanged((user) => setState({ ...state, currentUser: user }));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  console.log(state.currentUser);
 
   return (
     <div className="App bg-black">
       <div className="text-white mb-4">Hookoney!</div>
-      {state.hasAccount ? (
-        <div className="text-white">{`Hello, ${state.name}!`}</div>
+      {state.currentUser ? (
+        <div className="text-white">{`Hello, ...!`}</div>
       ) : (
         <div className="flex flex-col">
           <input
