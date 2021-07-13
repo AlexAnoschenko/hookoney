@@ -1,14 +1,31 @@
 import { useEffect, useState } from "react";
+import { BrowserRouter, Route, Switch } from "react-router-dom";
 import firebase from "firebase";
-import "./App.css";
+import Layout from "./Layout/Layout";
+import MainPage from "./pages/MainPage/MainPage";
+import Authorization from "./pages/Authorization/Authorization";
+import Registration from "./pages/Registration/Registration";
+import Loader from "./components/Loader/Loader";
+
+import {
+  ROUTE_MAIN_PAGE,
+  ROUTE_AUTHORIZATION,
+  ROUTE_REGISTRATION,
+} from "./routes.ts";
 
 function App() {
   const [state, setState] = useState({
     email: "",
     password: "",
-    // hasAccount: false,
     name: "",
     currentUser: null,
+    isLoading: true,
+  });
+
+  const db = firebase.database();
+
+  db.ref("name").on("value", (snapshot) => {
+    snapshot.val();
   });
 
   const handleChange = ({ target: { value, id } }) => {
@@ -17,59 +34,55 @@ function App() {
 
   const createAccount = () => {
     const { email, password } = state;
-    // firebase.auth().createUserWithEmailAndPassword(email, password);
-
-    firebase.auth().signInWithEmailAndPassword(email, password);
-    // .then((response) => {
-    //   setState({ ...state, hasAccount: true });
-    //   console.log(response);
-    // });
+    firebase.auth().createUserWithEmailAndPassword(email, password);
   };
 
-  const db = firebase.database();
-
-  db.ref("name").on("value", (snapshot) => {
-    snapshot.val();
-  });
+  const signUpUser = () => {
+    const { email, password } = state;
+    firebase.auth().signInWithEmailAndPassword(email, password);
+  };
 
   useEffect(() => {
-    firebase
-      .auth()
-      .onAuthStateChanged((user) => setState({ ...state, currentUser: user }));
+    if (!state.currentUser) {
+      firebase
+        .auth()
+        .onAuthStateChanged((user) =>
+          setState({ ...state, currentUser: user, isLoading: false })
+        );
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  console.log(state.currentUser);
+  if (state.isLoading) {
+    return (
+      <Layout>
+        <Loader />
+      </Layout>
+    );
+  }
 
   return (
-    <div className="App bg-black">
-      <div className="text-white mb-4">Hookoney!</div>
-      {state.currentUser ? (
-        <div className="text-white">{`Hello, ...!`}</div>
-      ) : (
-        <div className="flex flex-col">
-          <input
-            id="email"
-            type="text"
-            className="mb-2 rounded"
-            onChange={handleChange}
-          />
-          <input
-            id="password"
-            type="password"
-            className="mb-2 rounded"
-            onChange={handleChange}
-          />
-          <button
-            type="submit"
-            className="text-white rounded border border-white"
-            onClick={createAccount}
-          >
-            Submit
-          </button>
-        </div>
-      )}
-    </div>
+    <BrowserRouter>
+      <Switch>
+        <Route path={ROUTE_MAIN_PAGE} exact>
+          <Layout>
+            <Route exact component={MainPage} />
+          </Layout>
+        </Route>
+
+        <Route path={ROUTE_AUTHORIZATION} exact>
+          <Layout>
+            <Route exact component={Authorization} />
+          </Layout>
+        </Route>
+
+        <Route path={ROUTE_REGISTRATION} exact>
+          <Layout>
+            <Route exact component={Registration} />
+          </Layout>
+        </Route>
+      </Switch>
+    </BrowserRouter>
   );
 }
 
