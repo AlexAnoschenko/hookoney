@@ -1,0 +1,23 @@
+.color-change {
+  animation: color-change 4s infinite;
+}
+
+@keyframes color-change {
+  0% {
+    color: #d97706;
+  }
+  25% {
+    color: rgb(229, 255, 0);
+  }
+  50% {
+    color: rgb(0, 255, 179);
+  }
+
+  75% {
+    color: rgb(255, 196, 0);
+  }
+
+  100% {
+    color: #d97706;
+  }
+}
