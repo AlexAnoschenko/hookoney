@@ -1,5 +1,6 @@
 import { useHistory } from "react-router-dom";
 import firebase from "firebase";
+import SettingsSVG from "../../assets/svg/SettingsSVG";
 
 const Layout = ({ children, state, setState }) => {
   let history = useHistory();
@@ -15,13 +16,20 @@ const Layout = ({ children, state, setState }) => {
       <div className="absolute top-2 left-4 text-center text-md mb-4 text-yellow-600">
         (Demo)
       </div>
+
       {state?.currentUser && (
-        <button
-          className="absolute top-2 right-4 w-20 bg-yellow-700 py-1 text-sm text-white font-semibold rounded-lg shadow-md hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-400 focus:ring-opacity-75"
-          onClick={logOutUser}
-        >
-          Log out
-        </button>
+        <>
+          <div className="absolute top-2 right-28 w-7 cursor-pointer">
+            <SettingsSVG />
+          </div>
+
+          <button
+            className="absolute top-2 right-4 w-20 bg-yellow-700 py-1 text-sm text-white font-semibold rounded-lg shadow-md hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-400 focus:ring-opacity-75"
+            onClick={logOutUser}
+          >
+            Log out
+          </button>
+        </>
       )}
 
       {children}

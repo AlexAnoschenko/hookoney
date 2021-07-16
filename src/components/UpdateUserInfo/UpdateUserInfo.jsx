@@ -1,6 +1,11 @@
 import { useState } from "react";
 
-const UpdateUserInfo = ({ state, snackState, setSnackState }) => {
+const UpdateUserInfo = ({
+  state,
+  snackState,
+  setSnackState,
+  setIsUpdateInfo,
+}) => {
   const [displayName, setDisplayName] = useState(null);
 
   const updateUserName = () => {
@@ -15,6 +20,7 @@ const UpdateUserInfo = ({ state, snackState, setSnackState }) => {
           type: "success",
           text: "Name saved!",
         });
+        setIsUpdateInfo(false);
       });
   };
 
@@ -26,7 +32,7 @@ const UpdateUserInfo = ({ state, snackState, setSnackState }) => {
           <input
             id="displayName"
             type="text"
-            className="mb-4 rounded w-60 h-9 pl-2 rounded-lg text-black font-semibold"
+            className="mb-4 rounded w-60 h-9 pl-2 rounded-lg text-black font-semibold w-full"
             onChange={(e) => setDisplayName(e.target.value)}
           />
 
