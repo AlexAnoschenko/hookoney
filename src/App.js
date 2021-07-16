@@ -6,6 +6,7 @@ import MainPage from "./pages/MainPage/MainPage";
 import Authorization from "./pages/Authorization/Authorization";
 import Registration from "./pages/Registration/Registration";
 import Loader from "./components/Loader/Loader";
+import Snackbar from "./components/Snackbar/Snackbar";
 
 import {
   ROUTE_MAIN_PAGE,
@@ -14,6 +15,12 @@ import {
 } from "./routes.ts";
 
 function App() {
+  const [snackState, setSnackState] = useState({
+    openSnack: false,
+    type: null,
+    text: null,
+  });
+
   const [state, setState] = useState({
     email: "",
     password: "",
@@ -26,6 +33,14 @@ function App() {
   db.ref("name").on("value", (snapshot) => {
     snapshot.val();
   });
+
+  const handleCloseSnack = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+
+    setSnackState({ ...snackState, openSnack: false });
+  };
 
   useEffect(() => {
     if (!state.currentUser) {
@@ -49,32 +64,41 @@ function App() {
   }
 
   return (
-    <BrowserRouter>
-      <Layout state={state} setState={setState}>
-        <Switch>
-          {state.currentUser && (
-            <Route path={ROUTE_MAIN_PAGE} exact>
-              <MainPage state={state} setState={setState} />
+    <>
+      <Snackbar snackState={snackState} handleCloseSnack={handleCloseSnack} />
+
+      <BrowserRouter>
+        <Layout state={state} setState={setState}>
+          <Switch>
+            {state.currentUser && (
+              <Route path={ROUTE_MAIN_PAGE} exact>
+                <MainPage state={state} setState={setState} />
+              </Route>
+            )}
+
+            {!state.currentUser && (
+              <Route path={ROUTE_AUTHORIZATION} exact>
+                <Authorization
+                  state={state}
+                  setState={setState}
+                  snackState={snackState}
+                  setSnackState={setSnackState}
+                />
+              </Route>
+            )}
+
+            <Route path={ROUTE_REGISTRATION} exact>
+              <Registration state={state} setState={setState} />
             </Route>
-          )}
 
-          {!state.currentUser && (
-            <Route path={ROUTE_AUTHORIZATION} exact>
-              <Authorization state={state} setState={setState} />
-            </Route>
-          )}
-
-          <Route path={ROUTE_REGISTRATION} exact>
-            <Registration state={state} setState={setState} />
-          </Route>
-
-          <Redirect
-            push
-            to={`${state.currentUser ? "/" : ROUTE_AUTHORIZATION}`}
-          />
-        </Switch>
-      </Layout>
-    </BrowserRouter>
+            <Redirect
+              push
+              to={`${state.currentUser ? "/" : ROUTE_AUTHORIZATION}`}
+            />
+          </Switch>
+        </Layout>
+      </BrowserRouter>
+    </>
   );
 }
 

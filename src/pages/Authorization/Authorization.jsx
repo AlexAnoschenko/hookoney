@@ -4,7 +4,12 @@ import Layout from "../../Layout/Layout";
 import Loader from "../../components/Loader/Loader";
 import "./styles.css";
 
-const Authorization = ({ state, setState }) => {
+const ERRORS = [
+  { "auth/user-not-found": "User not found." },
+  { "auth/wrong-password": "Wrong password." },
+];
+
+const Authorization = ({ state, setState, snackState, setSnackState }) => {
   let history = useHistory();
 
   const handleChange = ({ target: { value, id } }) => {
@@ -19,7 +24,32 @@ const Authorization = ({ state, setState }) => {
       .signInWithEmailAndPassword(email, password)
       .then(() => {
         setState({ ...state, isLoading: false });
+        setSnackState({
+          ...snackState,
+          openSnack: true,
+          type: "success",
+          text: "You are successfully logged in!",
+        });
         history.push("/");
+      })
+      .catch((err) => {
+        setState({ ...state, isLoading: false });
+
+        err.code === "auth/user-not-found" &&
+          setSnackState({
+            ...snackState,
+            openSnack: true,
+            type: "error",
+            text: "User not found.",
+          });
+
+        err.code === "auth/wrong-password" &&
+          setSnackState({
+            ...snackState,
+            openSnack: true,
+            type: "error",
+            text: "Wrong password.",
+          });
       });
   };
 
