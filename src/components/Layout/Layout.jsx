@@ -1,6 +1,6 @@
 import { useHistory } from "react-router-dom";
 import firebase from "firebase";
-import SettingsSVG from "../../assets/svg/SettingsSVG";
+import SettingsSVG from "../../assets/svg/Settings/SettingsSVG";
 
 const Layout = ({ children, state, setState }) => {
   let history = useHistory();
