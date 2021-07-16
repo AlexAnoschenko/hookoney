@@ -1,18 +1,48 @@
 import { useHistory } from "react-router-dom";
 import firebase from "firebase";
-import Layout from "../../Layout/Layout";
+import Layout from "../../components/Layout/Layout";
 import Loader from "../../components/Loader/Loader";
+import { ERRORS } from "../../utils/constants";
 import "./styles.css";
 
 const Authorization = ({ state, setState, snackState, setSnackState }) => {
   let history = useHistory();
 
+  const { email, password } = state;
+
   const handleChange = ({ target: { value, id } }) => {
     setState({ ...state, [id]: value });
   };
 
+  const createAccount = () => {
+    setState({ ...state, isLoading: true });
+    firebase
+      .auth()
+      .createUserWithEmailAndPassword(email, password)
+      .then(() => {
+        firebase.auth().signInWithEmailAndPassword(email, password);
+        setState({ ...state, isLoading: false });
+        setSnackState({
+          ...snackState,
+          openSnack: true,
+          type: "success",
+          text: "You are successfully logged in!",
+        });
+        history.push("/");
+      })
+      .catch((err) => {
+        console.log(err.code);
+        setState({ ...state, isLoading: false });
+        setSnackState({
+          ...snackState,
+          openSnack: true,
+          type: "error",
+          text: ERRORS[err.code],
+        });
+      });
+  };
+
   const signUpUser = () => {
-    const { email, password } = state;
     setState({ ...state, isLoading: true });
     firebase
       .auth()
@@ -29,22 +59,12 @@ const Authorization = ({ state, setState, snackState, setSnackState }) => {
       })
       .catch((err) => {
         setState({ ...state, isLoading: false });
-
-        err.code === "auth/user-not-found" &&
-          setSnackState({
-            ...snackState,
-            openSnack: true,
-            type: "error",
-            text: "User not found.",
-          });
-
-        err.code === "auth/wrong-password" &&
-          setSnackState({
-            ...snackState,
-            openSnack: true,
-            type: "error",
-            text: "Wrong password.",
-          });
+        setSnackState({
+          ...snackState,
+          openSnack: true,
+          type: "error",
+          text: ERRORS[err.code],
+        });
       });
   };
 
@@ -79,10 +99,18 @@ const Authorization = ({ state, setState, snackState, setSnackState }) => {
 
       <button
         type="submit"
-        className="py-2 px-4 bg-yellow-600 text-white font-semibold rounded-lg shadow-md hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-400 focus:ring-opacity-75"
+        className="py-2 px-4 mb-2 bg-yellow-600 text-white font-semibold rounded-lg shadow-md hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-400 focus:ring-opacity-75"
         onClick={signUpUser}
       >
         Sign In
+      </button>
+
+      <button
+        type="submit"
+        className="py-2 px-4 bg-blue-600 text-white font-semibold rounded-lg shadow-md hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-400 focus:ring-opacity-75"
+        onClick={createAccount}
+      >
+        Sign Up
       </button>
     </div>
   );

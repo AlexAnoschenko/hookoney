@@ -1,18 +1,13 @@
 import { useEffect, useState } from "react";
 import { BrowserRouter, Route, Switch, Redirect } from "react-router-dom";
 import firebase from "firebase";
-import Layout from "./Layout/Layout";
+import Layout from "./components/Layout/Layout";
 import MainPage from "./pages/MainPage/MainPage";
 import Authorization from "./pages/Authorization/Authorization";
-import Registration from "./pages/Registration/Registration";
 import Loader from "./components/Loader/Loader";
 import Snackbar from "./components/Snackbar/Snackbar";
 
-import {
-  ROUTE_MAIN_PAGE,
-  ROUTE_AUTHORIZATION,
-  ROUTE_REGISTRATION,
-} from "./routes.ts";
+import { ROUTE_MAIN_PAGE, ROUTE_AUTHORIZATION } from "./routes.ts";
 
 function App() {
   const [snackState, setSnackState] = useState({
@@ -86,10 +81,6 @@ function App() {
                 />
               </Route>
             )}
-
-            <Route path={ROUTE_REGISTRATION} exact>
-              <Registration state={state} setState={setState} />
-            </Route>
 
             <Redirect
               push

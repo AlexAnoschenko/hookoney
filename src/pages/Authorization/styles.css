@@ -1,5 +1,5 @@
 .color-change {
-  animation: color-change 4s infinite;
+  animation: color-change 3s infinite;
 }
 
 @keyframes color-change {
