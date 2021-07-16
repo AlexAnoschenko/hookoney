@@ -4,11 +4,6 @@ import Layout from "../../Layout/Layout";
 import Loader from "../../components/Loader/Loader";
 import "./styles.css";
 
-const ERRORS = [
-  { "auth/user-not-found": "User not found." },
-  { "auth/wrong-password": "Wrong password." },
-];
-
 const Authorization = ({ state, setState, snackState, setSnackState }) => {
   let history = useHistory();
 
