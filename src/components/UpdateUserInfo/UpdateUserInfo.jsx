@@ -1,11 +1,6 @@
 import { useState } from "react";
 
-const UpdateUserInfo = ({
-  state,
-  snackState,
-  setSnackState,
-  setIsUpdateInfo,
-}) => {
+const UpdateUserInfo = ({ state, setState, snackState, setSnackState }) => {
   const [displayName, setDisplayName] = useState(null);
 
   const updateUserName = () => {
@@ -20,7 +15,8 @@ const UpdateUserInfo = ({
           type: "success",
           text: "Name saved!",
         });
-        setIsUpdateInfo(false);
+
+        setState({ ...state, isUpdateInfo: false });
       });
   };
 

@@ -1,11 +1,10 @@
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
 import UpdateUserInfo from "../../components/UpdateUserInfo/UpdateUserInfo";
 
 const MainPage = ({ state, setState, snackState, setSnackState }) => {
-  const [isUpdateInfo, setIsUpdateInfo] = useState(false);
-
   useEffect(() => {
-    !state.currentUser.displayName && setIsUpdateInfo(true);
+    !state.currentUser.displayName &&
+      setState({ ...state, isUpdateInfo: true });
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -22,13 +21,12 @@ const MainPage = ({ state, setState, snackState, setSnackState }) => {
           <span className="text-3xl color-change">!</span>
         </div>
 
-        {isUpdateInfo && (
+        {state.isUpdateInfo && (
           <UpdateUserInfo
             state={state}
             setState={setState}
             snackState={snackState}
             setSnackState={setSnackState}
-            setIsUpdateInfo={setIsUpdateInfo}
           />
         )}
       </div>

@@ -11,6 +11,10 @@ const Layout = ({ children, state, setState }) => {
     history.push("/authorization");
   };
 
+  const openUpdateUserInfo = () => {
+    setState({ ...state, isUpdateInfo: true });
+  };
+
   return (
     <div className="flex flex-col items-center justify-center h-screen bg-defaultBg text-white">
       <div className="absolute top-2 left-4 text-center text-md mb-4 text-yellow-600">
@@ -19,7 +23,10 @@ const Layout = ({ children, state, setState }) => {
 
       {state?.currentUser && (
         <>
-          <div className="absolute top-2 right-28 w-7 cursor-pointer">
+          <div
+            className="absolute top-2 right-28 w-7 cursor-pointer"
+            onClick={openUpdateUserInfo}
+          >
             <SettingsSVG />
           </div>
 

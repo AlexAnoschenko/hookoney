@@ -21,6 +21,7 @@ function App() {
     password: "",
     currentUser: null,
     isLoading: true,
+    isUpdateInfo: false,
   });
 
   const db = firebase.database();
