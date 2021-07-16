@@ -25,9 +25,11 @@ export default function Snackbars({ snackState, handleCloseSnack }) {
         autoHideDuration={2000}
         onClose={handleCloseSnack}
       >
-        <Alert onClose={handleCloseSnack} severity={snackState.type}>
-          {snackState.text}
-        </Alert>
+        <div className="mb-6">
+          <Alert onClose={handleCloseSnack} severity={snackState.type}>
+            {snackState.text}
+          </Alert>
+        </div>
       </Snackbar>
     </div>
   );

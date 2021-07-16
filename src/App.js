@@ -67,7 +67,12 @@ function App() {
           <Switch>
             {state.currentUser && (
               <Route path={ROUTE_MAIN_PAGE} exact>
-                <MainPage state={state} setState={setState} />
+                <MainPage
+                  state={state}
+                  setState={setState}
+                  snackState={snackState}
+                  setSnackState={setSnackState}
+                />
               </Route>
             )}
 

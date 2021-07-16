@@ -31,7 +31,6 @@ const Authorization = ({ state, setState, snackState, setSnackState }) => {
         history.push("/");
       })
       .catch((err) => {
-        console.log(err.code);
         setState({ ...state, isLoading: false });
         setSnackState({
           ...snackState,
@@ -42,12 +41,12 @@ const Authorization = ({ state, setState, snackState, setSnackState }) => {
       });
   };
 
-  const signUpUser = () => {
+  const signIpUser = () => {
     setState({ ...state, isLoading: true });
     firebase
       .auth()
       .signInWithEmailAndPassword(email, password)
-      .then(() => {
+      .then((res) => {
         setState({ ...state, isLoading: false });
         setSnackState({
           ...snackState,
@@ -100,7 +99,7 @@ const Authorization = ({ state, setState, snackState, setSnackState }) => {
       <button
         type="submit"
         className="py-2 px-4 mb-2 bg-yellow-600 text-white font-semibold rounded-lg shadow-md hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-400 focus:ring-opacity-75"
-        onClick={signUpUser}
+        onClick={signIpUser}
       >
         Sign In
       </button>
